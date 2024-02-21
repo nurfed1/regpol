@@ -72,20 +72,19 @@ def cli(filename, raw_data):
         body = body[2:]
 
         # key
-        key, _, body = body.partition(b';\x00')
+        key, _, body = body.partition(b'\x00\x00;\x00')
         # print(len(key))
         # print(key)
         key = decode_key(key)
 
         # value
-        value, _, body = body.partition(b';\x00')
+        value, _, body = body.partition(b'\x00\x00;\x00')
         # print(len(key))
         # print(key)
         value = decode_value(value)
 
         # type
-        regtype = body[0:4]
-        body = body[4+2:]  # len of field plus semicolon delimieter
+        regtype, _, body = body.partition(b';\x00')
         regtype = struct.unpack("<I", regtype)[0]
 
         # size
